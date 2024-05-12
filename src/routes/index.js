@@ -5,7 +5,6 @@ import PrivateRoute from "./privateRoute";
 import { AuthProvider } from "./Context"; 
 const RouteApp = () => {
   return (
-
     <>
       <BrowserRouter>
         <AuthProvider>

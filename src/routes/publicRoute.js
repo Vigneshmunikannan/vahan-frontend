@@ -1,12 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-// import Login from "../screens/login";
-// import Error from "../components/notFound/Error";
+import AuthForm from "../PublicComponents/Form";
+import Error from "../PrivateComponents/Error"
+import { useAuth } from './Context';
 const PublicRoute = () => {
+    const { isValidTokenAvailable } = useAuth();
     return (
         <>
-            <Routes>
-                {/* <Route path="/" element={<Login />} />
-                <Route path="*" element={<Error />} /> */}
+            <Routes> 
+                 <Route path="/" element={<AuthForm />} />
+                 {!isValidTokenAvailable() && <Route path="*" element={<Error/>}/>}
+                 
             </Routes>
         </>
 
