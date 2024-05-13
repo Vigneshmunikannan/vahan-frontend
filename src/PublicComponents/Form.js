@@ -14,9 +14,10 @@ const AuthForm = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleError = (error) => {
-    console.log(error.response.data)
+    setIsLoading(false);
     setErrorMessage(error.response.data.message);
     setTimeout(() => {
       setErrorMessage('')
@@ -39,6 +40,8 @@ const AuthForm = () => {
       return;
     }
     try {
+      if (isLoading) return;
+      setIsLoading(true);
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
         username: username,
         name: name,
@@ -49,7 +52,7 @@ const AuthForm = () => {
           'Content-Type': 'application/json'
         }
       });
-
+      setIsLoading(false);
       setSuccessMessage(response.data.msg)
       setTimeout(() => {
         setSuccessMessage('')
@@ -74,7 +77,8 @@ const AuthForm = () => {
       return;
     }
     try {
-      
+      if (isLoading) return; // Prevent multiple requests
+      setIsLoading(true);
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
         username: username,
         password: password
@@ -83,6 +87,7 @@ const AuthForm = () => {
           'Content-Type': 'application/json'
         }
       });
+      setIsLoading(false);
       setSuccessMessage(response.data.msg)
       login(response.data.token)
       setTimeout(() => {
@@ -100,6 +105,12 @@ const AuthForm = () => {
 
   const toggleForm = () => {
     setIsRegistering(!isRegistering);
+    setSuccessMessage('')
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setName('');
+    setIsLoading(false)
   };
 
   return (

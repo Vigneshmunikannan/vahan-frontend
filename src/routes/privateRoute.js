@@ -5,7 +5,7 @@ import AllStudents from "../PrivateComponents/AllStudents";
 import AddStudent from "../PrivateComponents/AddStudent"
 import MyProfile from "../PrivateComponents/Myprofile"
 import { useAuth } from './Context';
-
+import Error from "../PrivateComponents/Error"
 const PrivateRoute = () => {
   const { isValidTokenAvailable } = useAuth();
   return (
@@ -17,8 +17,10 @@ const PrivateRoute = () => {
             <Route path="/students" element={<AllStudents />} />
             <Route path="/add-student" element={<AddStudent />} />
             <Route path="/profile" element={<MyProfile />} />
+            <Route path="*" element={<Error />} />
           </>
         }
+        
       </Routes>
     </>
   );
