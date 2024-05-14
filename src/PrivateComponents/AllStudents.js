@@ -18,7 +18,9 @@ export default function AllStudents() {
     year: '',
     mobileNumber: '',
     college: '',
-    DOB: ''
+    DOB: '',
+    lastname:'',
+    firstname:''
   });
 
   useEffect(() => {
@@ -87,7 +89,9 @@ export default function AllStudents() {
       year: student.year,
       mobileNumber: student.mobileNumber,
       college: student.college,
-      DOB: student.DOB
+      DOB: student.DOB,
+      firstname:student.firstname,
+      lastname:student.lastname
     });
   };
 
@@ -115,6 +119,8 @@ export default function AllStudents() {
     try {
       if (isLoading) return;
       setIsLoading(true);
+
+      
       const response = await axios.patch(`${process.env.REACT_APP_API_URL}/update/${selectedStudent.id}`, changedData, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -142,7 +148,9 @@ export default function AllStudents() {
       year: '',
       mobileNumber: '',
       college: '',
-      DOB: ''
+      DOB: '',
+      firstname:'',
+      lastname:''
     });
     setSelectedStudent(null);
   };
@@ -165,11 +173,11 @@ export default function AllStudents() {
 
 
   return (
-    <div className='container'>
-      <h1>All Students</h1>
+    <div >
+      <h1 style={{marginLeft:"50px"}}>All Students</h1>
       {successMessage && <MessageComponent type="success" message={successMessage} />}
       {errorMessage && <MessageComponent type="error" message={errorMessage} />}
-      <ul>
+      <ul className='container'>
         {students.length > 0 ? (
           students.map(student => (
             <li key={student.id}>
@@ -179,8 +187,7 @@ export default function AllStudents() {
                 <p>Department: {student.department}</p>
                 <p>Year: {student.year}</p>
                 <p>Mobile Number: {student.mobileNumber}</p>
-                <p>DOB : {new Date(student.DOB).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-
+                <p>DOB: {new Date(student.DOB).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <p>College: {student.college}</p>
               </div>
               <div>
@@ -198,6 +205,11 @@ export default function AllStudents() {
           <div className="popup-content">
             <h2>Edit Student Details</h2>
             <form onSubmit={handleSaveEdit}>
+            <label>First Name:</label>
+              <input type="text" name="firstname" value={editedData.firstname} onChange={handleInputChange} />
+              <label>Last Name:</label>
+              <input type="text" name="lastname" value={editedData.lastname} onChange={handleInputChange} />
+
               <label>Department:</label>
               <select id="department" name="department" value={editedData.department} onChange={handleInputChange}>
                 <option value="">Select Department</option>
@@ -218,7 +230,6 @@ export default function AllStudents() {
                   </option>
                 ))}
               </select>
-
               <label>Mobile Number:</label>
               <input type="text" name="mobileNumber" value={editedData.mobileNumber} onChange={handleInputChange} />
               <label>College:</label>
@@ -231,11 +242,13 @@ export default function AllStudents() {
                 onChange={handleInputChange}
               />
               <button type="submit">Save</button>
-              <button onClick={handleCloseEdit}>Cancel</button>
+              <button type="button" onClick={handleCloseEdit}>Cancel</button>
             </form>
           </div>
         </div>
       )}
     </div>
+
+
   );
 }
